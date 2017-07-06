@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>音乐播放器</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,urer-scalable=0"/>
+		<style type="text/css">
+			*{
+				box-sizing: border-box;
+			}
+			body,html{
+				height: 100vh;
+				width: 100vw;
+			}
+			body{
+				margin: 0;
+				
+			}
+			div{
+				display: inline-block;
+				width: 13vw;
+				text-align: center;
+			}
+			footer{
+				width: 74vw;
+				height: 15px;
+				border: 5px solid lightblue;
+				border-radius: 10px;
+				display: inline-block;
+			}
+			section{
+				height: 5px;
+				width: 0px;
+				border-radius: 10px;
+				background-color: green;
+			}
+			input{
+				border-radius: 10px;
+				background-color: mediumorchid;
+				box-shadow: 2px 2px 2px #2D93CA;
+			}
+			h1,h3{
+				width: 100%;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+			}
+			img{
+				border-radius: 50%;
+				border: 10px solid rgba(0,0,0,0.1);
+				width: 80vw;
+				height: 80vw;
+				margin: 10px 10vw;
+			}
+			i{
+				display: inline-block;
+				width: 100vw;
+				height: 100vh;
+				z-index: -1;
+				filter: blur(100px);
+				position: absolute;
+				top: 0;
+				background-image: url(images/ldh.jpg);
+				background-size: 100% 100%;
+			}
+			@keyframes rotate{
+				from{
+					transform: rotate(0);
+				}
+				to{
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<audio></audio>
+		<h1></h1><!--显示歌曲名-->
+		<h3></h3><!--显示歌手名-->
+		<img src=""/><!--显示人物歌星的图片-->
+		<i></i>
+		<div></div><!--显示播放时间
+		--><footer>
+		<section></section>
+		</footer><!--
+		--><div></div><!--显示总时间-->
+		
+		<hr style="visibility:hidden;"/>
+		<input type="button" value="播放|>" onclick="play()"/>
+		<input type="button" value="暂停||" onclick="pause()"/>
+		<input type="button" value="上一首" onclick="prev()"/>
+		<input type="button" value="下一首" onclick="next()"/>
+		<input type="button" value="音量+" onclick="volumeUp()"/>
+		<input type="button" value="音量-" onclick="volumeDown()"/>
+		<input type="button" value="单曲循环" onclick="dqxh()"/>
+		<input type="button" value="顺序播放" onclick="sxbf()"/>
+		<input type="button" value="随机播放" onclick="sjbf()"/>
+		
+		<span></span><!--显示音量大小的-->
+		<p></p><!--显示播放/暂停的状态-->
+		
+		
+	</body>
+</html>
+
+<script type="text/javascript">
+	
+	var audio = document.getElementsByTagName('audio')[0]
+	var span = document.querySelector('span')
+	var p = document.querySelector('p')
+	var h1 = document.querySelector('h1')
+	var h3 = document.querySelector('h3')
+	var div1 = document.querySelectorAll('div')[0] 
+	var div2 = document.querySelectorAll('div')[1]
+	var img = document.querySelector('img')
+	var k = document.querySelector('section')
+	var i = document.querySelector('i')
+	//要一个装所有歌曲各个属性的列表
+	
+	var list =[
+	{
+		name:'传奇',
+		src:'mp3/传奇.mp3',
+		singer:'王菲',
+		cover:'images/wf.png'
+	},
+	{
+		name:'凤凰花开的路口',
+		src:'mp3/凤凰花开的路口.mp3',
+		singer:'林志炫',
+		cover:'images/ldh.jpg'
+	},
+	{
+		name:'知道不知道',
+		src:'mp3/知道不知道.mp3',
+		singer:'刘若英',
+		cover:'images/lry.jpg'
+	},
+	]
+	
+	
+	// 表示第几首个
+	var current = 0
+	//设置播放的声音大小  取值范围[0.0 ~ 1.0]
+	audio.volume = 1
+	//找到一首歌
+	var ge = list[current]
+	//显示歌名与歌手
+	h1.innerHTML = ge.name ;
+	h3.innerHTML = '—' + ge.singer + '—';
+	//加载封面图片
+	img.src = ge.cover
+	i.style.backgroundImage = 'url('+ ge.cover + ')'
+	//播放按钮的点击方法
+	function play(){
+		//找到一首歌
+		var ge = list[current]
+		//显示歌名与歌手
+		h1.innerHTML = ge.name ;
+		h3.innerHTML = '—' + ge.singer + '—';
+		//加载封面图片
+		img.src = ge.cover
+		//加载音频
+		audio.src = ge.src
+		audio.play()
+		i.style.backgroundImage = 'url('+ ge.cover + ')'
+	}
+	
+	//暂停 
+	function pause(){
+//		audio.pause
+
+		// 判断当前是否为暂停状态
+		// audio.paused 当暂停时 返回 true,当播放时返回false 
+		if(audio.paused){
+			audio.play()
+		}
+		else{
+			audio.pause()
+		}
+	}
+	//上一首
+	function prev(){
+		if(current > 0){
+			current --
+		}
+		else{
+			current = list.length - 1
+		}
+		
+//		var a = current
+//		if (a == 0) {
+//			a = 2
+//		}
+//		else if(a == 1){
+//			a = 0
+//		}
+//		else{
+//			a = 1
+//		}
+//		current = a;
+		play()
+	}
+	//下一首
+	function next(){
+		
+		if(current < list.length - 1){
+			current ++
+		}
+		else{
+			current = 0
+		}
+		  
+//		var a = current
+//		if (a == 0) {
+//			a = 1
+//		}
+//		else if(a == 1){
+//			a = 2
+//		}
+//		else{
+//			a = 0
+//		}
+//		current = a;
+		play()
+	}
+	
+	function volumeUp(){
+		if(audio.volume<1){
+			audio.volume+=0.1
+		}
+		else{
+			audio.volume=1
+		}
+	}
+	
+	function volumeDown(){
+		if(audio.volume>0){
+			audio.volume-=0.1
+		}
+		else{
+			audio.volume=0
+		}
+	}
+	
+	//监听音量变化
+	// onvolumechange : 当音量发生改变时触发
+	audio.onvolumechange = function(){
+		//toFixed 四舍五入 保留1位小数(括号中写几就保留几位)
+		span.innerHTML = audio.volume.toFixed(1)
+	}
+	
+	//监听是否正在播放
+	audio.onplaying= function(){
+		p.innerHTML = '正在播放'
+	}
+	
+	//监听是否暂停
+	audio.onpause= function(){
+		p.innerHTML = '已经暂停'
+		
+	}
+	
+	//监听播放时间的变化
+	//audio.currentTime 当前播放时间
+	var curr =audio.currentTime
+	//audio.duration 获取总时间
+	var dur = audio.duration
+	
+	//循环播放或者顺序播放或者随机播放
+	
+	function dqxh(){
+		audio.removeAttribute('class')
+		audio.setAttribute('class', 'loop')
+		if(audio.paused){
+			audio.play()
+		}
+	}
+	function sxbf(){
+		audio.removeAttribute('class')
+		audio.setAttribute('class', 'next')
+		if(audio.paused){
+			audio.play()
+		}
+	}
+	function sjbf(){
+		audio.removeAttribute('class')
+		audio.setAttribute('class', 'rand')
+		if(audio.paused){
+			audio.play()
+		}
+	}
+	
+	
+	
+	audio.ontimeupdate = function(){
+		//audio.currentTime 当前播放时间
+		var curr =audio.currentTime
+		//audio.duration 获取总时间
+		var dur = audio.duration
+		var dd =  curr / dur *100
+		div1.innerHTML = format(curr)
+		div2.innerHTML = format(dur)
+		img.style.animation = 'rotate 30s infinite linear'
+		k.style.width = dd +'%'
+		if(format(curr)==format(dur)){
+			if(audio.class=='loop'){
+				play()
+			}
+			else if(audio.class=='next'){
+				next()
+			}
+			else{
+				current = parseInt(Math.random()*3)
+				play()
+			}
+		}
+	}
+	// 格式化时间 传一个时间过来 将其转化为 分:秒 的格式
+	function format(second){
+		//将数字转化成整数
+		var time = parseInt(second)
+		// 秒数
+		var s = time % 60
+		// 分钟数
+		var m = parseInt(time / 60)
+		
+		// s < 10 为判断条件,如果条件成立 执行'0'+ s 如果不成立 执行 s
+		// 三木运算符 也叫三元运算
+		// 问号前面为判断条件,如果条件成立执行 冒号前面的 否则执行冒号后面的
+		s = s < 10 ? '0'+ s : s
+		m = m < 10 ? '0'+ m : m
+		return m+':'+s
+	}
+	
+</script>
